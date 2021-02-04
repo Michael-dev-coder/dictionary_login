@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+       <style>
+         .centered2{
+             text-align: center;
+             padding-bottom: 30px;
+         }
+         .word-result-box{
+             display: flex;
+             padding: 8px 16px;
+             background:white;
+             border-radius: 8px;
+             margin-bottom: 16px;
+             flex-direction: column;
+         }
+         .divider {
+             height: 2px;
+             width: 100%;
+             background: #ccc;
+         }
+     </style>
+     <div class="content-section">
+              <form action="" method="post" novalidate>
+               {{ form.hidden_tag() }}
+                   <fieldset class="form-group">
+                        <legend class="border-bottom mb-4", style="font-size:5vw; text-align: center;">Know-Centre</legend>
+                    <div class="form-group">
+                        {{ form.word(class="form-control form-control-lg",placeholder='What would you like to know?') }}
+                    </div>
+                <p class="text-center">{{ form.submit(class="btn btn-outline-info btn-lg") }}</p>
+                   </fieldset>
+              </form>
+      </div>
+      <div class="content-section">
+        <div class="centered2">
+            {% if found %}
+                {% for word in resp %}
+                <div class="word-result-box">
+                    <p>{{ word['value'] }}</p>
+                    <div class="divider"></div>
+                    <p style="color: #699;">Part of Speech: {{ word['part_of_speech'] }}</p>
+                    <p>Definition: {{ word['definition'] }}</p>
+                    {% if word['usage'] | length > 0 %}
+                        <p>Usage: </p>
+                    {% endif %}
+                    {% for usage in word['usage'] %}
+                        <p>{{ usage }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="word-result-box">
+                    <p>Not Found</p>
+                    <div class="divider"></div>
+                    {% if suggestions | length > 0 %}
+                        <p style="color: #699;">Words similar to your search:</p>
+                        {% for sugg in suggestions %}
+                            <p>{{ sugg }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content%}
